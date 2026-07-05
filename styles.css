@@ -503,9 +503,17 @@ input { font-family: inherit; }
   background-color: var(--on-background);
   color: var(--on-primary);
   border: none;
+  text-align: left !important;
 }
 
-.glass-card--dark h3 { color: var(--on-primary); }
+.glass-card--dark h3 {
+  color: var(--on-primary);
+  text-align: left !important;
+}
+
+.glass-card h3 {
+  text-align: left !important;
+}
 .glass-card--dark .benefit-list li { color: var(--surface-container-high); }
 .glass-card--dark .benefit-list .material-symbols-outlined { color: var(--primary-fixed); }
 .glass-card--dark .title-highlight { color: var(--primary-fixed-dim); }
