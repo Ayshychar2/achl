@@ -507,7 +507,7 @@ input { font-family: inherit; }
 }
 
 .glass-card--dark h3 {
-  color: var(--on-primary);
+  color: #fcfcfc !important;
   text-align: left !important;
 }
 
