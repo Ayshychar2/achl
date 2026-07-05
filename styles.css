@@ -511,13 +511,16 @@ input { font-family: inherit; }
 
 .card-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .card-icon {
   width: 48px;
+  min-width: 48px;
   height: 48px;
   border-radius: 50%;
   background: rgba(152, 0, 11, 0.1);
@@ -525,6 +528,7 @@ input { font-family: inherit; }
   align-items: center;
   justify-content: center;
   color: var(--primary);
+  flex-shrink: 0;
 }
 
 .glass-card--dark .card-icon {
@@ -538,6 +542,8 @@ input { font-family: inherit; }
   font-weight: 700;
   text-transform: uppercase;
   color: var(--primary);
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .glass-card h3 {
@@ -554,17 +560,20 @@ input { font-family: inherit; }
 .benefit-list li {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  font-size: 16px;
-  line-height: 24px;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 22px;
   color: var(--secondary);
 }
 
 .benefit-list .material-symbols-outlined {
   font-size: 20px;
+  width: 20px;
+  height: 20px;
   color: var(--primary);
-  margin-top: 2px;
+  margin-top: 1px;
   flex-shrink: 0;
+  line-height: 1;
 }
 
 .benefit-list--grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -1144,18 +1153,26 @@ input { font-family: inherit; }
 
 .footer-column a:hover { color: var(--primary); opacity: 1; }
 
-.social-links { display: flex; gap: 12px; }
+.social-links {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
 .social-link {
   width: 40px;
+  min-width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: var(--surface-container-highest);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--on-surface);
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  text-decoration: none;
 }
 
 .social-link:hover {
@@ -1163,7 +1180,13 @@ input { font-family: inherit; }
   color: var(--on-primary);
 }
 
-.social-link .material-symbols-outlined { font-size: 18px; }
+.social-link .material-symbols-outlined {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  display: block;
+}
 
 /* ===================================================================
    ANIMATIONS
