@@ -513,10 +513,14 @@ input { font-family: inherit; }
 .card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
+  justify-content: flex-start;
+  margin-bottom: 20px;
   gap: 12px;
-  flex-wrap: wrap;
+}
+
+/* When card-header has a tag, push it to the right */
+.card-header .card-tag {
+  margin-left: auto;
 }
 
 .card-icon {
@@ -1153,6 +1157,17 @@ input { font-family: inherit; }
 }
 
 .footer-column a:hover { color: var(--primary); opacity: 1; }
+
+/* Override .footer-column a styles for social links */
+.footer-column .social-links {
+  margin-top: 4px;
+}
+
+.footer-column .social-link {
+  display: inline-flex !important;
+  margin-bottom: 0 !important;
+  opacity: 1 !important;
+}
 
 .social-links {
   display: flex;
