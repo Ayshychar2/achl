@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - ACHL Learning</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="/" class="logo">ACHL Learning</a>
+        <h1>Create an Account</h1>
+        <p>Join us to build your critical thinking edge.</p>
+      </div>
+
+      <div class="role-toggle">
+        <button class="role-tab active" data-role="student">I am a Student</button>
+        <button class="role-tab" data-role="company">I am a Company</button>
+      </div>
+
+      <!-- Student Signup Form -->
+      <form id="student-signup" class="auth-form active" action="dashboard-student.html">
+        <div class="form-group">
+          <label for="student-name">Full Name</label>
+          <input type="text" id="student-name" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="student-email">Email Address</label>
+          <input type="email" id="student-email" placeholder="student@university.edu" required>
+        </div>
+        <div class="form-group">
+          <label for="student-uni">University / College</label>
+          <input type="text" id="student-uni" placeholder="e.g. Delhi University" required>
+        </div>
+        <div class="form-group">
+          <label for="student-password">Password</label>
+          <input type="password" id="student-password" placeholder="Create a password" required>
+        </div>
+        <button type="submit" class="btn-auth">Create Student Account</button>
+      </form>
+
+      <!-- Company Signup Form -->
+      <form id="company-signup" class="auth-form" action="dashboard-company.html">
+        <div class="form-group">
+          <label for="company-name">Company Name</label>
+          <input type="text" id="company-name" placeholder="Acme Corp" required>
+        </div>
+        <div class="form-group">
+          <label for="company-email">Work Email</label>
+          <input type="email" id="company-email" placeholder="hr@company.com" required>
+        </div>
+        <div class="form-group">
+          <label for="company-role">Your Role</label>
+          <input type="text" id="company-role" placeholder="e.g. HR Manager / Founder" required>
+        </div>
+        <div class="form-group">
+          <label for="company-password">Password</label>
+          <input type="password" id="company-password" placeholder="Create a password" required>
+        </div>
+        <button type="submit" class="btn-auth">Create Company Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Log In</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const roleTabs = document.querySelectorAll('.role-tab');
+    const authForms = document.querySelectorAll('.auth-form');
+
+    roleTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        roleTabs.forEach(t => t.classList.remove('active'));
+        authForms.forEach(f => f.classList.remove('active'));
+
+        tab.classList.add('active');
+
+        const role = tab.getAttribute('data-role');
+        document.getElementById(`${role}-signup`).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

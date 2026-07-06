@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - ACHL Learning</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="/" class="logo">ACHL Learning</a>
+        <h1>Welcome Back</h1>
+        <p>Enter your details to access your account.</p>
+      </div>
+
+      <div class="role-toggle">
+        <button class="role-tab active" data-role="student">Student</button>
+        <button class="role-tab" data-role="company">Company</button>
+      </div>
+
+      <!-- Student Login Form -->
+      <form id="student-login" class="auth-form active" action="dashboard-student.html">
+        <div class="form-group">
+          <label for="student-email">Email Address</label>
+          <input type="email" id="student-email" placeholder="student@university.edu" required>
+        </div>
+        <div class="form-group">
+          <label for="student-password">Password</label>
+          <input type="password" id="student-password" placeholder="••••••••" required>
+        </div>
+        <div class="form-options">
+          <label>
+            <input type="checkbox" checked> Remember me
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-auth">Log In as Student</button>
+      </form>
+
+      <!-- Company Login Form -->
+      <form id="company-login" class="auth-form" action="dashboard-company.html">
+        <div class="form-group">
+          <label for="company-email">Work Email</label>
+          <input type="email" id="company-email" placeholder="hr@company.com" required>
+        </div>
+        <div class="form-group">
+          <label for="company-password">Password</label>
+          <input type="password" id="company-password" placeholder="••••••••" required>
+        </div>
+        <div class="form-options">
+          <label>
+            <input type="checkbox" checked> Remember me
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-auth">Log In as Company</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="signup.html">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const roleTabs = document.querySelectorAll('.role-tab');
+    const authForms = document.querySelectorAll('.auth-form');
+
+    roleTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs & forms
+        roleTabs.forEach(t => t.classList.remove('active'));
+        authForms.forEach(f => f.classList.remove('active'));
+
+        // Add active class to clicked tab
+        tab.classList.add('active');
+
+        // Show corresponding form
+        const role = tab.getAttribute('data-role');
+        document.getElementById(`${role}-login`).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

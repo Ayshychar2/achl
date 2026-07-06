@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Dashboard - ACHL</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="dashboard-page">
+
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <a href="/" class="logo">ACHL Learning</a>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active">
+        <span class="material-symbols-outlined">dashboard</span>
+        Recruitment Hub
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="material-symbols-outlined">person_search</span>
+        Candidate Search
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="material-symbols-outlined">work</span>
+        Job Postings
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="material-symbols-outlined">analytics</span>
+        Analytics
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="material-symbols-outlined">domain</span>
+        Company Profile
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar" style="background: var(--on-background);">HR</div>
+        <div class="user-info">
+          <span class="user-name">Sarah Jenkins</span>
+          <span class="user-role">Acme Corp</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <div class="dashboard-header">
+      <h1>Company Dashboard</h1>
+      <div class="header-actions">
+        <a href="/" class="btn-dash" style="background: var(--surface-container-highest); color: var(--on-surface);">Back to Site</a>
+        <a href="login.html" class="btn-dash">Log Out</a>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- Quick Stats -->
+      <div class="dash-card">
+        <h3>Active Job Postings</h3>
+        <div class="stat-value">3</div>
+        <p style="color: var(--secondary); margin-top: 8px;">Across 2 departments</p>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="dash-card">
+        <h3>Total Applications</h3>
+        <div class="stat-value">128</div>
+        <p style="color: var(--secondary); margin-top: 8px;">+14 this week</p>
+      </div>
+
+      <!-- Action Card -->
+      <div class="dash-card">
+        <h3>Find Critical Thinkers</h3>
+        <p style="color: var(--secondary); margin-bottom: 24px; line-height: 1.6;">Search our database of ACHL certified candidates ready to solve real-world problems.</p>
+        <a href="#" class="btn-dash">Search Candidates</a>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

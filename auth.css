@@ -1,0 +1,186 @@
+/* ===================================================================
+   AUTHENTICATION STYLES (Login / Sign Up)
+   =================================================================== */
+
+body.auth-page {
+  background-color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.auth-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.auth-card {
+  background: var(--background);
+  width: 100%;
+  max-width: 480px;
+  border-radius: var(--radius-xl);
+  padding: 48px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-light);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-header .logo {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.auth-header h1 {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 24px;
+  color: var(--on-background);
+  margin-bottom: 8px;
+}
+
+.auth-header p {
+  color: var(--secondary);
+  font-size: 15px;
+}
+
+/* Role Toggle Tabs */
+.role-toggle {
+  display: flex;
+  background: var(--surface-container-highest);
+  border-radius: var(--radius-full);
+  padding: 4px;
+  margin-bottom: 32px;
+}
+
+.role-tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--secondary);
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-tab.active {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 2px 8px rgba(152, 0, 11, 0.2);
+}
+
+/* Forms */
+.auth-form {
+  display: none;
+}
+
+.auth-form.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--on-background);
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: var(--surface);
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(152, 0, 11, 0.1);
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.form-options a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-options a:hover {
+  text-decoration: underline;
+}
+
+.btn-auth {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-auth:hover {
+  background: var(--primary-fixed-dim);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(152, 0, 11, 0.2);
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 15px;
+  color: var(--secondary);
+}
+
+.auth-footer a {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .auth-card { padding: 32px 24px; }
+}
