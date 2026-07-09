@@ -3,8 +3,8 @@ import React from 'react';
 export default function Collaboration() {
   return (
     <section className="collaboration-section" style={{ padding: '60px 0', overflow: 'hidden', background: 'var(--surface-container-highest)' }}>
-      <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '32px', color: 'var(--on-background)' }}>Our Collaborative Partners</h2>
+      <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px', padding: '0 16px' }}>
+        <h2 style={{ fontSize: '32px', color: 'var(--on-background)', lineHeight: '1.4', marginBottom: '16px' }}>Our Collaborative Partners</h2>
         <p style={{ color: 'var(--secondary)' }}>Trusted by industry leaders</p>
       </div>
       
