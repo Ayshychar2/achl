@@ -6,7 +6,24 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const users = await prisma.user.findMany({
-      select: { id: true, name: true, email: true, role: true }
+      select: { 
+        id: true, 
+        name: true, 
+        email: true, 
+        role: true,
+        enrollments: {
+          include: {
+            course: {
+              include: {
+                sessions: {
+                  orderBy: { order: 'asc' }
+                }
+              }
+            }
+          }
+        },
+        studentProgress: true
+      }
     });
     return NextResponse.json({ users });
   } catch (error) {

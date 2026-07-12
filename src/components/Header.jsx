@@ -11,9 +11,10 @@ export default function Header() {
         <div className="header-inner">
           <Link href="/" className="logo">ACHL Learning</Link>
           <nav className="desktop-nav">
-            <Link href="/#about">About</Link>
-            <Link href="/#programs">Programs</Link>
-            <Link href="/#contact">Contact</Link>
+            <Link href="/about">About</Link>
+            <Link href="/certification">Certification Program</Link>
+            <Link href="/hr">For HR</Link>
+            <Link href="/contact">Contact</Link>
           </nav>
           <div className="header-cta-wrapper">
             <Link href="/login" className="btn-text" style={{ marginRight: '12px', fontWeight: 600, textDecoration: 'none', color: 'var(--on-background)' }}>
@@ -34,9 +35,10 @@ export default function Header() {
 
       {/* Mobile Menu Overlay */}
       <div className={`mobile-menu ${menuOpen ? 'active' : ''}`} id="mobile-menu" style={{ display: menuOpen ? 'flex' : 'none' }}>
-        <Link href="/#about" onClick={() => setMenuOpen(false)}>About</Link>
-        <Link href="/#programs" onClick={() => setMenuOpen(false)}>Programs</Link>
-        <Link href="/#contact" onClick={() => setMenuOpen(false)}>Contact</Link>
+        <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
+        <Link href="/certification" onClick={() => setMenuOpen(false)}>Certification Program</Link>
+        <Link href="/hr" onClick={() => setMenuOpen(false)}>For HR</Link>
+        <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
         <Link href="/login" onClick={() => setMenuOpen(false)}>Login</Link>
         <Link href="/signup" className="mobile-cta" onClick={() => setMenuOpen(false)}>Sign Up</Link>
       </div>

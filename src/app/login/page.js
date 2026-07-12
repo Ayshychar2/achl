@@ -43,7 +43,7 @@ export default function Login() {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f4f4f5' }}>
       <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', width: '100%', maxWidth: '400px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', textAlign: 'center' }}>Welcome Back</h1>
-        <p style={{ textAlign: 'center', color: '#666', marginBottom: '24px' }}>Log in to ACHL Learning</p>
+        <div style={{ textAlign: 'center', color: '#666', marginBottom: '24px' }}>Log in to ACHL Learning</div>
         
         {error && <div style={{ background: '#fee2e2', color: '#dc2626', padding: '12px', borderRadius: '6px', marginBottom: '16px', fontSize: '14px' }}>{error}</div>}
         
@@ -78,9 +78,9 @@ export default function Login() {
           </button>
         </form>
         
-        <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: '#666' }}>
+        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: '#666' }}>
           Don't have an account? <Link href="/signup" style={{ color: 'var(--primary)', fontWeight: 'bold', textDecoration: 'none' }}>Sign up</Link>
-        </p>
+        </div>
       </div>
     </div>
   );

@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("STUDENT") // STUDENT, COMPANY, ADMIN
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  password        String
+  name            String?
+  role            String            @default("STUDENT") // STUDENT, COMPANY, ADMIN
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  enrollments     Enrollment[]
+  studentProgress StudentProgress[]
 }
 
 model DemoRequest {
@@ -24,3 +26,43 @@ model DemoRequest {
   createdAt DateTime @default(now())
 }
 
+model Course {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  sessions    Session[]
+  enrollments Enrollment[]
+}
+
+model Session {
+  id          Int               @id @default(autoincrement())
+  courseId    Int
+  course      Course            @relation(fields: [courseId], references: [id])
+  title       String
+  order       Int               // 1 to 8
+  meetLink    String?
+  progresses  StudentProgress[]
+}
+
+model Enrollment {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  courseId    Int
+  course      Course   @relation(fields: [courseId], references: [id])
+  enrolledAt  DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model StudentProgress {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  sessionId   Int
+  session     Session   @relation(fields: [sessionId], references: [id])
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+
+  @@unique([userId, sessionId])
+}
