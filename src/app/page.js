@@ -42,8 +42,8 @@ export default function Home() {
 
     <section className="founder-section section-padding" style={{ background: '#fff' }}>
       <div className="container">
-        <div className="founder-layout" style={{ display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <div className="founder-image reveal" style={{ flex: '1', minWidth: '300px' }}>
+        <div className="founder-layout" style={{ display: 'flex', gap: '60px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div className="founder-image reveal" style={{ flex: '0.7', minWidth: '300px', maxWidth: '400px', margin: '0 auto' }}>
             <img src="/founder.jpeg" alt="ACHL Founder" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }} />
           </div>
           <div className="founder-content reveal reveal-delay-1" style={{ flex: '1', minWidth: '300px' }}>
