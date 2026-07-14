@@ -445,7 +445,7 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="courses-section section-padding" id="courses" style={{ background: '#f8fafc' }}>
+    <section className="courses-section section-padding" id="courses" style={{ background: '#f8fafc', paddingBottom: '40px' }}>
       <div className="container">
         <div className="section-header reveal">
           <h2 className="section-title">Our <span className="title-highlight">Courses</span></h2>
@@ -477,7 +477,7 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="collab-section section-padding" style={{ background: '#f8fafc', overflow: 'hidden' }}>
+    <section className="collab-section section-padding" style={{ background: '#f8fafc', paddingTop: '40px', overflow: 'hidden' }}>
       <div className="container">
         <div className="section-header reveal">
           <h2 className="section-title">In <span className="title-highlight">Collaboration</span> With</h2>
