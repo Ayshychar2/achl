@@ -33,7 +33,7 @@ export default function Home() {
               <a href="#enroll" className="btn-primary hover-translate-y" style={{ padding: '14px 28px', fontSize: '1.1rem', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s', cursor: 'pointer' }}>
                 Book a Demo <span className="material-symbols-outlined">arrow_forward</span>
               </a>
-              <a href="#programs" className="hover-translate-y" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', fontWeight: 600, padding: '14px 28px', transition: 'all 0.3s', cursor: 'pointer' }}>
+              <a href="#programs" className="hover-translate-y btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', fontWeight: 600, padding: '12px 26px', transition: 'all 0.3s', cursor: 'pointer', border: '2px solid var(--primary)', borderRadius: '30px' }}>
                 Explore Programs
               </a>
             </div>
