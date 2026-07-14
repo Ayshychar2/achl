@@ -12,11 +12,13 @@ model User {
   email           String            @unique
   password        String
   name            String?
-  role            String            @default("STUDENT") // STUDENT, COMPANY, ADMIN
+  role            String            @default("STUDENT") // STUDENT, COMPANY, ADMIN, HR
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   enrollments     Enrollment[]
   studentProgress StudentProgress[]
+  hiringReqs      HiringRequirement[]
+  referredIn      ReferredStudent[]
 }
 
 model DemoRequest {
@@ -40,7 +42,6 @@ model Session {
   course      Course            @relation(fields: [courseId], references: [id])
   title       String
   order       Int               // 1 to 8
-  meetLink    String?
   progresses  StudentProgress[]
 }
 
@@ -63,6 +64,38 @@ model StudentProgress {
   session     Session   @relation(fields: [sessionId], references: [id])
   completed   Boolean   @default(false)
   completedAt DateTime?
+  meetLink    String?
 
   @@unique([userId, sessionId])
+}
+
+model HiringRequirement {
+  id          Int      @id @default(autoincrement())
+  hrId        Int
+  hr          User     @relation(fields: [hrId], references: [id])
+  title       String
+  description String
+  status      String   @default("OPEN")
+  createdAt   DateTime @default(now())
+  referrals   ReferredStudent[]
+}
+
+model ReferredStudent {
+  id                  Int               @id @default(autoincrement())
+  hiringRequirementId Int
+  hiringRequirement   HiringRequirement @relation(fields: [hiringRequirementId], references: [id])
+  studentId           Int
+  student             User              @relation(fields: [studentId], references: [id])
+  status              String            @default("PENDING")
+  createdAt           DateTime          @default(now())
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
 }

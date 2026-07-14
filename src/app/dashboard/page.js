@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [enrollments, setEnrollments] = useState([]);
+  const [availableCourses, setAvailableCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,10 +20,17 @@ export default function Dashboard() {
 
   const fetchProgress = async (userId) => {
     try {
-      const res = await fetch(`/api/student/progress?userId=${userId}`);
-      if (res.ok) {
-        const data = await res.json();
+      const [progRes, availRes] = await Promise.all([
+        fetch(`/api/student/progress?userId=${userId}`),
+        fetch(`/api/student/available-courses?userId=${userId}`)
+      ]);
+      if (progRes.ok) {
+        const data = await progRes.json();
         setEnrollments(data);
+      }
+      if (availRes.ok) {
+        const data = await availRes.json();
+        setAvailableCourses(data);
       }
     } catch (e) {
       console.error(e);
@@ -56,6 +64,31 @@ export default function Dashboard() {
     } catch (e) {
       console.error(e);
       alert('Error joining session');
+    }
+  };
+
+  const handleEnroll = async (courseId, btnElement) => {
+    const originalText = btnElement.innerText;
+    btnElement.innerText = 'Enrolling...';
+    btnElement.disabled = true;
+    try {
+      const res = await fetch('/api/student/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, courseId })
+      });
+      if (res.ok) {
+        fetchProgress(user.id);
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Failed to enroll');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Error enrolling in course');
+    } finally {
+      btnElement.innerText = originalText;
+      btnElement.disabled = false;
     }
   };
 
@@ -94,11 +127,39 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* Available Courses Section */}
+            {availableCourses.length > 0 && (
+              <div style={{ background: '#fff', padding: '32px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                <h2 style={{ fontSize: '24px', margin: '0 0 24px 0', color: '#0f172a' }}>Available Courses</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+                  {availableCourses.map(course => (
+                    <div key={course.id} style={{ background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ background: '#e0e7ff', height: '120px', borderRadius: '8px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '48px', color: '#4338ca' }}>school</span>
+                      </div>
+                      <h3 style={{ fontSize: '20px', margin: '0 0 8px 0', color: '#1e293b' }}>{course.title}</h3>
+                      <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '24px', flex: '1' }}>{course.description || 'Enhance your skills with our certification program.'}</p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--primary)' }}>₹2500</span>
+                        <button 
+                          onClick={(e) => handleEnroll(course.id, e.target)}
+                          style={{ background: '#2563eb', color: 'white', padding: '8px 16px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}
+                        >
+                          Enroll Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Courses & Progress */}
+            <h2 style={{ fontSize: '24px', margin: '0 0 -16px 0', color: '#0f172a' }}>My Learning</h2>
             {enrollments.length === 0 ? (
               <div style={{ background: '#fff', padding: '32px', borderRadius: '12px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <h3 style={{ margin: '0 0 16px 0', color: '#334155' }}>No active courses</h3>
-                <p style={{ color: '#64748b' }}>You are not enrolled in any courses yet. When an Admin enrolls you, your course will appear here.</p>
+                <p style={{ color: '#64748b' }}>You are not enrolled in any courses yet. Enroll in a course above to start learning.</p>
               </div>
             ) : (
               enrollments.map((enrollment) => {
@@ -156,9 +217,9 @@ export default function Dashboard() {
                             <div>
                               {isCompleted ? (
                                 <span style={{ color: '#15803d', fontWeight: '500', fontSize: '14px' }}>Completed</span>
-                              ) : session.meetLink ? (
+                              ) : session.progresses[0]?.meetLink ? (
                                 <button 
-                                  onClick={() => handleJoinSession(session.id)}
+                                  onClick={() => window.open(session.progresses[0].meetLink, '_blank')}
                                   style={{ background: '#4338ca', color: 'white', padding: '8px 16px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500', fontSize: '14px' }}
                                 >
                                   Join Session

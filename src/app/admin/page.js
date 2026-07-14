@@ -5,16 +5,18 @@ export default function AdminPanel() {
   const [users, setUsers] = useState([]);
   const [demos, setDemos] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [requirements, setRequirements] = useState([]);
+  const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('STUDENTS'); // STUDENTS, COMPANIES, DEMOS, COURSES, SETTINGS
+  const [activeTab, setActiveTab] = useState('STUDENTS'); // STUDENTS, COMPANIES, DEMOS, COURSES, HIRING, CONTACTS, SETTINGS
   const [adminEmail, setAdminEmail] = useState('');
 
   // Password change state
-  const [passwords, setPasswords] = useState({ current: '', new: '' });
-  const [pwdStatus, setPwdStatus] = useState({ type: '', message: '' });
+  const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' });
+  const [passMsg, setPassMsg] = useState({ type: '', text: '' });
   
-  // Course creation state
-  const [newCourse, setNewCourse] = useState({ title: '', description: '' });
+  // New course state
+  const [newCourse, setNewCourse] = useState({ title: '', description: '', numSessions: 8 });
   
   // Enrollment state
   const [enrollForm, setEnrollForm] = useState({ userId: '', courseId: '' });
@@ -35,18 +37,24 @@ export default function AdminPanel() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [userRes, demoRes, courseRes] = await Promise.all([
+      const [userRes, demoRes, courseRes, reqRes, contactRes] = await Promise.all([
         fetch('/api/admin/users'),
         fetch('/api/admin/demos'),
-        fetch('/api/admin/courses')
+        fetch('/api/admin/courses'),
+        fetch('/api/admin/requirements'),
+        fetch('/api/admin/contact')
       ]);
       const userData = await userRes.json();
       const demoData = await demoRes.json();
       const courseData = await courseRes.json();
+      const reqData = await reqRes.json();
+      const contactData = await contactRes.json();
       
       setUsers(userData.users || []);
       setDemos(demoData.demos || []);
       setCourses(courseData || []);
+      setRequirements(reqData || []);
+      setContacts(contactData.messages || []);
     } catch (e) {
       console.error(e);
     } finally {
@@ -74,6 +82,16 @@ export default function AdminPanel() {
     }
   };
 
+  const handleDeleteContact = async (id) => {
+    if (!confirm('Are you sure you want to delete this contact message?')) return;
+    try {
+      await fetch(`/api/admin/contact?id=${id}`, { method: 'DELETE' });
+      fetchData();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleCreateCourse = async (e) => {
     e.preventDefault();
     try {
@@ -82,7 +100,7 @@ export default function AdminPanel() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newCourse)
       });
-      setNewCourse({ title: '', description: '' });
+      setNewCourse({ title: '', description: '', numSessions: 8 });
       fetchData();
     } catch (e) {
       console.error(e);
@@ -233,8 +251,8 @@ export default function AdminPanel() {
       <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
         
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '2px solid #e4e4e7', paddingBottom: '12px' }}>
-          {['STUDENTS', 'COMPANIES', 'DEMOS', 'COURSES', 'SETTINGS'].map(tab => (
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '2px solid #e4e4e7', paddingBottom: '12px', overflowX: 'auto' }}>
+          {['STUDENTS', 'COMPANIES', 'DEMOS', 'COURSES', 'HIRING', 'CONTACTS', 'SETTINGS'].map(tab => (
             <button 
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -245,13 +263,16 @@ export default function AdminPanel() {
                 border: 'none',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                fontWeight: activeTab === tab ? 'bold' : 'normal'
+                fontWeight: activeTab === tab ? 'bold' : 'normal',
+                whiteSpace: 'nowrap'
               }}
             >
               {tab === 'STUDENTS' && `Students (${students.length})`}
               {tab === 'COMPANIES' && `Companies (${companies.length})`}
               {tab === 'DEMOS' && `Demo Requests (${demos.length})`}
               {tab === 'COURSES' && `Courses & Sessions`}
+              {tab === 'HIRING' && `Hiring Requirements`}
+              {tab === 'CONTACTS' && `Contact Form (${contacts.length})`}
               {tab === 'SETTINGS' && 'Settings'}
             </button>
           ))}
@@ -262,93 +283,111 @@ export default function AdminPanel() {
           
           {(activeTab === 'STUDENTS' || activeTab === 'COMPANIES') && (
             <>
-              <h2 style={{ marginTop: 0, marginBottom: '16px' }}>
-                {activeTab === 'STUDENTS' ? 'Registered Students' : 'Registered Companies'}
+              <h2 style={{ marginTop: 0, marginBottom: '16px', color: '#1e293b' }}>
+                {activeTab === 'STUDENTS' ? 'Enrolled Students' : 'Registered Companies'}
               </h2>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ background: '#f4f4f5', borderBottom: '2px solid #e4e4e7' }}>
-                    <th style={{ padding: '12px' }}>ID</th>
-                    <th style={{ padding: '12px' }}>Name</th>
-                    <th style={{ padding: '12px' }}>Email</th>
-                    <th style={{ padding: '12px' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(activeTab === 'STUDENTS' ? students : companies).map(u => (
-                    <React.Fragment key={u.id}>
-                      <tr 
-                        style={{ borderBottom: '1px solid #e4e4e7', cursor: activeTab === 'STUDENTS' ? 'pointer' : 'default', background: expandedStudentId === u.id ? '#f8fafc' : 'white' }}
-                        onClick={() => {
-                          if (activeTab === 'STUDENTS') {
-                            setExpandedStudentId(expandedStudentId === u.id ? null : u.id);
-                          }
-                        }}
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                {(activeTab === 'STUDENTS' ? students : companies).map(u => (
+                  <div key={u.id} style={{ background: 'white', borderRadius: '6px', border: '1px solid #cbd5e1', overflow: 'hidden' }}>
+                    <div 
+                      style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', background: expandedStudentId === u.id ? '#f1f5f9' : 'white' }}
+                      onClick={() => setExpandedStudentId(expandedStudentId === u.id ? null : u.id)}
+                    >
+                      <div style={{ fontWeight: '500', color: '#334155', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '20px', fontSize: '12px', color: '#64748b', transition: 'transform 0.2s', transform: expandedStudentId === u.id ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                          ▶
+                        </span>
+                        <span>{u.name || 'Unnamed'} <span style={{ color: '#64748b', fontWeight: 'normal' }}>({u.email})</span></span>
+                      </div>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); handleDeleteUser(u.id); }}
+                        style={{ background: 'transparent', color: '#ef4444', border: '1px solid #fecaca', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
                       >
-                        <td style={{ padding: '12px' }}>
-                          {activeTab === 'STUDENTS' && (
-                            <span style={{ display: 'inline-block', width: '20px', fontSize: '12px' }}>
-                              {expandedStudentId === u.id ? '▼' : '▶'}
-                            </span>
-                          )}
-                          {u.id}
-                        </td>
-                        <td style={{ padding: '12px', fontWeight: '500' }}>{u.name || '-'}</td>
-                        <td style={{ padding: '12px' }}>{u.email}</td>
-                        <td style={{ padding: '12px' }}>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); handleDeleteUser(u.id); }}
-                            style={{ background: '#ef4444', color: 'white', padding: '6px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                      {activeTab === 'STUDENTS' && expandedStudentId === u.id && (
-                        <tr>
-                          <td colSpan="4" style={{ padding: 0 }}>
-                            <div style={{ background: '#f8fafc', padding: '16px 24px', borderBottom: '1px solid #e4e4e7' }}>
-                              <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#475569' }}>Enrollment & Progress for {u.name}</h4>
-                              {!u.enrollments || u.enrollments.length === 0 ? (
-                                <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>No active course enrollments.</p>
-                              ) : (
-                                u.enrollments.map(enrollment => {
-                                  const course = enrollment.course;
-                                  return (
-                                    <div key={enrollment.id} style={{ marginBottom: '16px', background: 'white', padding: '12px', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
-                                      <strong style={{ display: 'block', marginBottom: '8px' }}>{course.title}</strong>
-                                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                        {course.sessions.map(session => {
-                                          const isCompleted = u.studentProgress && u.studentProgress.some(p => p.sessionId === session.id && p.completed);
-                                          return (
-                                            <div key={session.id} style={{ 
-                                              fontSize: '12px', 
-                                              padding: '4px 8px', 
-                                              borderRadius: '4px',
-                                              background: isCompleted ? '#dcfce7' : '#f1f5f9',
-                                              color: isCompleted ? '#166534' : '#475569',
-                                              border: isCompleted ? '1px solid #bbf7d0' : '1px solid #e2e8f0'
-                                            }}>
-                                              {session.title}: {isCompleted ? '✅' : 'Pending'}
-                                            </div>
-                                          );
-                                        })}
+                        Delete
+                      </button>
+                    </div>
+                    
+                    {expandedStudentId === u.id && (
+                      <div style={{ padding: '20px 48px', borderTop: '1px solid #e2e8f0', background: '#fff' }}>
+                        <h4 style={{ margin: '0 0 16px 0', fontSize: '15px', color: '#0f172a' }}>Enrollments</h4>
+                        
+                        {!u.enrollments || u.enrollments.length === 0 ? (
+                          <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>No active course enrollments.</p>
+                        ) : (
+                          u.enrollments.map(enrollment => {
+                            const course = enrollment.course;
+                            return (
+                              <div key={enrollment.id} style={{ marginBottom: '24px' }}>
+                                <strong style={{ display: 'block', marginBottom: '12px', color: '#1e293b' }}>{course.title}</strong>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '16px' }}>
+                                  {course.sessions.map(session => {
+                                    const progress = u.studentProgress && u.studentProgress.find(p => p.sessionId === session.id);
+                                    const isCompleted = progress?.completed;
+                                    const currentLink = progress?.meetLink || '';
+                                    return (
+                                      <div key={session.id} style={{ 
+                                        display: 'flex', flexDirection: 'column', gap: '8px',
+                                        padding: '12px', borderRadius: '6px',
+                                        background: isCompleted ? '#f0fdf4' : '#f8fafc',
+                                        border: isCompleted ? '1px solid #bbf7d0' : '1px solid #e2e8f0',
+                                        boxSizing: 'border-box'
+                                      }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                          <span style={{ fontSize: '13px', fontWeight: '500', color: isCompleted ? '#166534' : '#334155' }}>{session.title}</span>
+                                          {isCompleted && <span style={{ color: '#166534', fontSize: '12px' }}>✅ Completed</span>}
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                                          <input 
+                                            id={`student-link-${u.id}-${session.id}`}
+                                            type="url" 
+                                            placeholder="Google Meet Link" 
+                                            defaultValue={currentLink}
+                                            style={{ flex: 1, minWidth: 0, padding: '6px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '12px', outline: 'none' }}
+                                          />
+                                          <button 
+                                            onClick={async (e) => {
+                                              const input = document.getElementById(`student-link-${u.id}-${session.id}`);
+                                              const link = input.value;
+                                              const btn = e.target;
+                                              const originalText = btn.innerText;
+                                              btn.innerText = '...';
+                                              try {
+                                                await fetch('/api/admin/student-progress', {
+                                                  method: 'PUT',
+                                                  headers: { 'Content-Type': 'application/json' },
+                                                  body: JSON.stringify({ userId: u.id, sessionId: session.id, meetLink: link })
+                                                });
+                                                btn.innerText = 'Sent';
+                                                setTimeout(() => { btn.innerText = originalText; }, 2000);
+                                                fetchData();
+                                              } catch (err) {
+                                                console.error(err);
+                                                btn.innerText = 'Error';
+                                              }
+                                            }}
+                                            style={{ background: '#2563eb', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: '500', whiteSpace: 'nowrap' }}
+                                          >
+                                            Send
+                                          </button>
+                                        </div>
                                       </div>
-                                    </div>
-                                  );
-                                })
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  ))}
-                  {(activeTab === 'STUDENTS' ? students : companies).length === 0 && (
-                    <tr><td colSpan="4" style={{ padding: '24px', textAlign: 'center', color: '#71717a' }}>No {activeTab.toLowerCase()} found.</td></tr>
-                  )}
-                </tbody>
-              </table>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                
+                {(activeTab === 'STUDENTS' ? students : companies).length === 0 && (
+                  <div style={{ padding: '24px', textAlign: 'center', color: '#71717a' }}>No {activeTab.toLowerCase()} found.</div>
+                )}
+              </div>
             </>
           )}
 
@@ -396,150 +435,52 @@ export default function AdminPanel() {
                 <div style={{ flex: '1', minWidth: '300px', padding: '24px', border: '1px solid #e4e4e7', borderRadius: '8px' }}>
                   <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Create New Course</h3>
                   <form onSubmit={handleCreateCourse}>
-                    <div style={{ marginBottom: '16px' }}>
-                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>Course Title</label>
-                      <input 
-                        type="text" 
-                        required 
-                        value={newCourse.title}
-                        onChange={e => setNewCourse({...newCourse, title: e.target.value})}
-                        style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #d4d4d8' }}
-                      />
+                    <div style={{ marginBottom: '16px', display: 'flex', gap: '16px' }}>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>Course Title</label>
+                        <input 
+                          type="text" 
+                          required 
+                          value={newCourse.title}
+                          onChange={e => setNewCourse({...newCourse, title: e.target.value})}
+                          style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #d4d4d8' }}
+                        />
+                      </div>
+                      <div style={{ width: '120px' }}>
+                        <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>Sessions</label>
+                        <input 
+                          type="number" 
+                          required 
+                          min="1"
+                          value={newCourse.numSessions}
+                          onChange={e => setNewCourse({...newCourse, numSessions: parseInt(e.target.value) || 1})}
+                          style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #d4d4d8' }}
+                        />
+                      </div>
                     </div>
                     <button type="submit" style={{ background: '#18181b', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}>
-                      Create Course (Auto-generates 8 Sessions)
-                    </button>
-                  </form>
-                </div>
-                
-                <div style={{ flex: '1', minWidth: '300px', padding: '24px', border: '1px solid #e4e4e7', borderRadius: '8px' }}>
-                  <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Enroll Student</h3>
-                  <form onSubmit={handleEnrollStudent}>
-                    <div style={{ marginBottom: '16px' }}>
-                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>Select Student</label>
-                      <select required value={enrollForm.userId} onChange={e => setEnrollForm({...enrollForm, userId: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #d4d4d8' }}>
-                        <option value="">-- Choose Student --</option>
-                        {students.map(s => <option key={s.id} value={s.id}>{s.name} ({s.email})</option>)}
-                      </select>
-                    </div>
-                    <div style={{ marginBottom: '16px' }}>
-                      <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>Select Course</label>
-                      <select required value={enrollForm.courseId} onChange={e => setEnrollForm({...enrollForm, courseId: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #d4d4d8' }}>
-                        <option value="">-- Choose Course --</option>
-                        {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
-                      </select>
-                    </div>
-                    <button id="btn-enroll" type="submit" style={{ background: '#2563eb', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}>
-                      Enroll Student
+                      Create Course
                     </button>
                   </form>
                 </div>
               </div>
 
-              <h2 style={{ marginTop: '40px', marginBottom: '16px' }}>Existing Courses & Sessions</h2>
+              <h2 style={{ marginTop: '40px', marginBottom: '16px' }}>Existing Courses</h2>
               {courses.map(course => (
                 <div key={course.id} style={{ marginBottom: '24px', padding: '20px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
-                  <h3 style={{ margin: '0 0 16px 0' }}>{course.title} (ID: {course.id})</h3>
-                  
-                  <div style={{ display: 'grid', gap: '12px' }}>
-                    {course.sessions?.map(session => (
-                      <div key={session.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'white', padding: '12px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontWeight: '500', width: '120px' }}>{session.title}</div>
-                        <input 
-                          id={`session-input-${session.id}`}
-                          type="url" 
-                          placeholder="Google Meet Link" 
-                          defaultValue={session.meetLink || ''}
-                          style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #cbd5e1' }}
-                        />
-                        <button 
-                          onClick={() => {
-                            const val = document.getElementById(`session-input-${session.id}`).value;
-                            handleUpdateSession(course.id, session.id, val);
-                            
-                            // Visual feedback without alert
-                            const btn = document.getElementById(`btn-save-${session.id}`);
-                            if(btn) {
-                              const originalText = btn.innerText;
-                              btn.innerText = 'Saved!';
-                              setTimeout(() => { btn.innerText = originalText; }, 2000);
-                            }
-                          }}
-                          id={`btn-save-${session.id}`}
-                          style={{ background: '#16a34a', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '13px' }}
-                        >
-                          Save & Share
-                        </button>
-                        <button
-                          id={`btn-delete-${session.id}`}
-                          onClick={() => handleDeleteSession(course.id, session.id)}
-                          style={{ background: '#ef4444', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '13px' }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 style={{ margin: '0 0 8px 0' }}>{course.title}</h3>
+                  <p style={{ margin: '0 0 16px 0', color: '#64748b' }}>Total Sessions: {course.sessions?.length || 0}</p>
 
-                  <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
-                    <input
-                      id={`new-session-${course.id}`}
-                      type="text"
-                      placeholder={`Session ${course.sessions ? course.sessions.length + 1 : 1} Title`}
-                      style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #cbd5e1' }}
-                    />
-                    <button
-                      id={`btn-create-${course.id}`}
-                      onClick={() => {
-                        const input = document.getElementById(`new-session-${course.id}`);
-                        if (input.value) {
-                          handleCreateSession(course.id, input.value);
-                          input.value = '';
-                        } else {
-                          alert('Please enter a session title');
-                        }
-                      }}
-                      style={{ background: '#2563eb', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', fontSize: '13px' }}
-                    >
-                      + Add Session
-                    </button>
-                  </div>
-
-                  <h4 style={{ marginTop: '24px', marginBottom: '12px', color: '#334155' }}>Enrolled Students</h4>
+                  <h4 style={{ marginTop: '16px', marginBottom: '12px', color: '#334155' }}>Enrolled Students</h4>
                   {course.enrollments && course.enrollments.length > 0 ? (
                     <div style={{ display: 'grid', gap: '8px' }}>
                       {course.enrollments.map(enrollment => {
                         const student = enrollment.user;
                         return (
-                          <div key={student.id} style={{ background: 'white', borderRadius: '6px', border: '1px solid #cbd5e1', overflow: 'hidden' }}>
-                            <div 
-                              style={{ padding: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', background: expandedStudentId === student.id ? '#f1f5f9' : 'white' }}
-                              onClick={() => setExpandedStudentId(expandedStudentId === student.id ? null : student.id)}
-                            >
-                              <div style={{ fontWeight: '500', color: '#0f172a' }}>
-                                <span style={{ display: 'inline-block', width: '24px', fontSize: '12px', color: '#64748b' }}>
-                                  {expandedStudentId === student.id ? '▼' : '▶'}
-                                </span>
-                                {student.name} <span style={{ color: '#64748b', fontWeight: 'normal' }}>({student.email})</span>
-                              </div>
+                          <div key={student.id} style={{ padding: '12px', background: 'white', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
+                            <div style={{ fontWeight: '500', color: '#0f172a' }}>
+                              {student.name} <span style={{ color: '#64748b', fontWeight: 'normal' }}>({student.email})</span>
                             </div>
-                            {expandedStudentId === student.id && (
-                              <div style={{ padding: '16px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                {course.sessions.map(session => {
-                                  const isCompleted = student.studentProgress && student.studentProgress.some(p => p.sessionId === session.id && p.completed);
-                                  return (
-                                    <div key={session.id} style={{ 
-                                      fontSize: '12px', padding: '6px 10px', borderRadius: '4px',
-                                      background: isCompleted ? '#dcfce7' : '#f1f5f9',
-                                      color: isCompleted ? '#166534' : '#475569',
-                                      border: isCompleted ? '1px solid #bbf7d0' : '1px solid #e2e8f0'
-                                    }}>
-                                      {session.title}: {isCompleted ? '✅ Completed' : 'Pending'}
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            )}
                           </div>
                         )
                       })}
@@ -552,6 +493,133 @@ export default function AdminPanel() {
               ))}
               {courses.length === 0 && <p style={{ color: '#64748b' }}>No courses created yet.</p>}
             </div>
+          )}
+
+          {activeTab === 'HIRING' && (
+            <div>
+              <h2 style={{ marginTop: 0, marginBottom: '16px' }}>Hiring Requirements from HR</h2>
+              
+              {requirements.length === 0 ? (
+                <div style={{ padding: '24px', textAlign: 'center', color: '#64748b', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+                  No hiring requirements posted yet.
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  {requirements.map(req => (
+                    <div key={req.id} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '24px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                        <div>
+                          <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', color: '#0f172a' }}>{req.title}</h3>
+                          <div style={{ fontSize: '14px', color: '#64748b' }}>
+                            Posted by: {req.hr.name} ({req.hr.email}) on {new Date(req.createdAt).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <span style={{ fontSize: '12px', fontWeight: '600', padding: '4px 8px', borderRadius: '4px', background: req.status === 'OPEN' ? '#dcfce7' : '#f1f5f9', color: req.status === 'OPEN' ? '#166534' : '#475569' }}>
+                          {req.status}
+                        </span>
+                      </div>
+                      <p style={{ color: '#475569', fontSize: '15px', marginBottom: '24px', whiteSpace: 'pre-wrap', background: 'white', padding: '16px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+                        {req.description}
+                      </p>
+                      
+                      <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                        <div style={{ flex: '1', minWidth: '300px' }}>
+                          <h4 style={{ margin: '0 0 12px 0' }}>Refer a Student</h4>
+                          <form onSubmit={async (e) => {
+                            e.preventDefault();
+                            const studentId = e.target.studentId.value;
+                            if(!studentId) return;
+                            const btn = e.target.submitBtn;
+                            const originalText = btn.innerText;
+                            btn.innerText = 'Referring...';
+                            try {
+                              const res = await fetch('/api/admin/referrals', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ hiringRequirementId: req.id, studentId })
+                              });
+                              if(res.ok) {
+                                fetchData();
+                              } else {
+                                const data = await res.json();
+                                alert(data.error);
+                              }
+                            } catch(err) {
+                              console.error(err);
+                            } finally {
+                              btn.innerText = originalText;
+                            }
+                          }}>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              <select name="studentId" required style={{ flex: '1', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
+                                <option value="">-- Select Student --</option>
+                                {students.map(s => <option key={s.id} value={s.id}>{s.name} ({s.email})</option>)}
+                              </select>
+                              <button name="submitBtn" type="submit" style={{ background: '#2563eb', color: 'white', border: 'none', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}>
+                                Refer Student
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                        
+                        <div style={{ flex: '1', minWidth: '300px' }}>
+                          <h4 style={{ margin: '0 0 12px 0' }}>Already Referred</h4>
+                          {!req.referrals || req.referrals.length === 0 ? (
+                            <div style={{ fontSize: '14px', color: '#64748b' }}>No students referred yet.</div>
+                          ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              {req.referrals.map(ref => (
+                                <div key={ref.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '8px 12px', borderRadius: '4px', border: '1px solid #e2e8f0' }}>
+                                  <div>
+                                    <div style={{ fontSize: '14px', fontWeight: '500' }}>{ref.student.name}</div>
+                                    <div style={{ fontSize: '12px', color: '#64748b' }}>{ref.student.email}</div>
+                                  </div>
+                                  <span style={{ fontSize: '12px', color: '#16a34a', fontWeight: '500' }}>Referred</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'CONTACTS' && (
+            <>
+              <h2 style={{ marginTop: 0, marginBottom: '16px' }}>Contact Form Submissions</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {contacts.map(c => (
+                  <div key={c.id} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                      <div>
+                        <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a' }}>{c.subject}</div>
+                        <div style={{ fontSize: '14px', color: '#64748b', marginTop: '4px' }}>
+                          From: {c.firstName} {c.lastName} ({c.email}) • {new Date(c.createdAt).toLocaleString()}
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => handleDeleteContact(c.id)}
+                        style={{ background: '#ef4444', color: 'white', padding: '6px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div style={{ background: 'white', padding: '16px', borderRadius: '6px', border: '1px solid #e2e8f0', color: '#334155', whiteSpace: 'pre-wrap' }}>
+                      {c.message}
+                    </div>
+                  </div>
+                ))}
+                {contacts.length === 0 && (
+                  <div style={{ padding: '24px', textAlign: 'center', color: '#71717a', border: '1px solid #e4e4e7', borderRadius: '8px' }}>
+                    No contact messages yet.
+                  </div>
+                )}
+              </div>
+            </>
           )}
 
           {activeTab === 'SETTINGS' && (

@@ -27,15 +27,15 @@ export async function GET() {
 
 export async function POST(req) {
   try {
-    const { title, description } = await req.json();
+    const { title, description, numSessions = 8 } = await req.json();
     
-    // Create course and its 8 sessions automatically
+    // Create course and its sessions automatically
     const course = await prisma.course.create({
       data: {
         title,
         description,
         sessions: {
-          create: Array.from({ length: 8 }).map((_, i) => ({
+          create: Array.from({ length: numSessions }).map((_, i) => ({
             title: `Session ${i + 1}`,
             order: i + 1,
           }))

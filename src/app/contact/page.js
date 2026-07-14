@@ -1,8 +1,39 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    subject: 'Student Enrollment',
+    message: ''
+  });
+  const [status, setStatus] = useState({ type: '', msg: '' });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ type: 'loading', msg: 'Sending message...' });
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      if (res.ok) {
+        setStatus({ type: 'success', msg: 'Your message has been sent successfully!' });
+        setFormData({ firstName: '', lastName: '', email: '', subject: 'Student Enrollment', message: '' });
+      } else {
+        const data = await res.json();
+        setStatus({ type: 'error', msg: data.error || 'Failed to send message.' });
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus({ type: 'error', msg: 'An error occurred. Please try again later.' });
+    }
+  };
   return (
     <>
       <Header />
@@ -55,26 +86,26 @@ export default function ContactPage() {
               </p>
             </div>
             
-            <form style={{ display: 'grid', gap: '24px' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '24px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
                 <div>
                   <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: 'var(--on-surface)' }}>First Name</label>
-                  <input type="text" placeholder="John" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }} />
+                  <input type="text" required value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} placeholder="John" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }} />
                 </div>
                 <div>
                   <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: 'var(--on-surface)' }}>Last Name</label>
-                  <input type="text" placeholder="Doe" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }} />
+                  <input type="text" required value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} placeholder="Doe" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }} />
                 </div>
               </div>
               
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: 'var(--on-surface)' }}>Email Address</label>
-                <input type="email" placeholder="john@example.com" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }} />
+                <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="john@example.com" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }} />
               </div>
               
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: 'var(--on-surface)' }}>Subject / Purpose</label>
-                <select style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }}>
+                <select value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none' }}>
                   <option>Student Enrollment</option>
                   <option>Employer Hiring</option>
                   <option>College Partnership</option>
@@ -84,12 +115,18 @@ export default function ContactPage() {
               
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: 'var(--on-surface)' }}>Message</label>
-                <textarea rows="5" placeholder="How can we help you?" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none', resize: 'vertical' }}></textarea>
+                <textarea required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} rows="5" placeholder="How can we help you?" style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--surface)', color: 'var(--on-surface)', outline: 'none', resize: 'vertical' }}></textarea>
               </div>
               
-              <button type="button" className="btn-primary" style={{ padding: '16px', fontSize: '1.1rem', marginTop: '16px', cursor: 'pointer' }}>
-                Submit Message
+              <button type="submit" disabled={status.type === 'loading'} className="btn-primary" style={{ padding: '16px', fontSize: '1.1rem', marginTop: '16px', cursor: 'pointer' }}>
+                {status.type === 'loading' ? 'Sending...' : 'Submit Message'}
               </button>
+
+              {status.msg && (
+                <div style={{ padding: '16px', borderRadius: '8px', backgroundColor: status.type === 'success' ? '#dcfce7' : '#fee2e2', color: status.type === 'success' ? '#166534' : '#991b1b' }}>
+                  {status.msg}
+                </div>
+              )}
             </form>
           </div>
         </section>

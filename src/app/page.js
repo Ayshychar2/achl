@@ -2,11 +2,11 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 
 import Header from '@/components/Header';
-import Collaboration from '@/components/Collaboration';
 import ScrollReveal from '@/components/ScrollReveal';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import BookDemoForm from '@/components/BookDemoForm';
+import HeroSlider from '@/components/HeroSlider';
 
 export default function Home() {
   return (
@@ -16,74 +16,7 @@ export default function Home() {
       <main>
         
 
-    
-    <section className="hero-slider" id="hero">
-      <div className="hero-slides">
-        
-        <div className="hero-slide active" style={{ backgroundImage: "url('hero-bg.jpg')" }}>
-          <div className="hero-overlay"></div>
-          <div className="hero-slide-content">
-            <h1>AI Will <span className="highlight">Replace You!</span></h1>
-            <p className="hero-subtitle">If AI can do your work, what makes you valuable? Learn to think, analyze, and decide.</p>
-            <div className="hero-actions">
-              <a href="#enroll" className="btn-hero-primary">
-                Enroll Right Now
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </a>
-              <a href="https://chat.whatsapp.com/BU0jlt2VSzQ5mL49U9oq3R" target="_blank" rel="noopener noreferrer" className="btn-hero-secondary">
-                Join Community
-                <span className="material-symbols-outlined">group</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        
-        <div className="hero-slide" style={{ backgroundImage: "url('hero-slide-2.png')" }}>
-          <div className="hero-overlay"></div>
-          <div className="hero-slide-content">
-            <h1>Think <span className="highlight">Beyond</span> the Algorithm</h1>
-            <p className="hero-subtitle">Machines follow patterns. Leaders break them. Build the thinking edge AI can't replicate.</p>
-            <div className="hero-actions">
-              <a href="#enroll" className="btn-hero-primary">
-                Start Learning
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </a>
-              <a href="#programs" className="btn-hero-secondary">
-                Explore Programs
-                <span className="material-symbols-outlined">school</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        
-        <div className="hero-slide" style={{ backgroundImage: "url('hero-slide-3.jpg')" }}>
-          <div className="hero-overlay"></div>
-          <div className="hero-slide-content">
-            <h1>Your Career Needs <span className="highlight">Critical Thinking</span></h1>
-            <p className="hero-subtitle">45.9% employability rate. Don't be on the wrong side. Upgrade how you think, not just what you know.</p>
-            <div className="hero-actions">
-              <a href="#enroll" className="btn-hero-primary">
-                Book a Demo
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </a>
-              <a href="#about" className="btn-hero-secondary">
-                Learn More
-                <span className="material-symbols-outlined">info</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      
-      <div className="hero-dots">
-        <button className="hero-dot active" data-slide="0" aria-label="Slide 1"></button>
-        <button className="hero-dot" data-slide="1" aria-label="Slide 2"></button>
-        <button className="hero-dot" data-slide="2" aria-label="Slide 3"></button>
-      </div>
-    </section>
+    <HeroSlider />
 
     
     <section className="intro-section section-padding" id="about">
@@ -103,6 +36,22 @@ export default function Home() {
           <p className="intro-muted">
             Students can solve questions. But struggle when profit doesn't mean success, good companies get rejected, or markets change suddenly. Real-world decisions require critical thinking.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <section className="founder-section section-padding" style={{ background: '#fff' }}>
+      <div className="container">
+        <div className="founder-layout" style={{ display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div className="founder-image reveal" style={{ flex: '1', minWidth: '300px' }}>
+            <img src="/founder.jpeg" alt="ACHL Founder" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }} />
+          </div>
+          <div className="founder-content reveal reveal-delay-1" style={{ flex: '1', minWidth: '300px' }}>
+            <h2 className="section-title">Meet Our <span className="title-highlight">Founder</span></h2>
+            <p style={{ fontSize: '18px', lineHeight: '1.6', color: 'var(--text-muted)' }}>
+              "The ability to think critically is the ultimate competitive advantage in an AI-driven world. We built ACHL to bridge the gap between academic knowledge and real-world decision-making."
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -496,6 +445,60 @@ export default function Home() {
       </div>
     </section>
 
+    <section className="courses-section section-padding" id="courses" style={{ background: '#f8fafc' }}>
+      <div className="container">
+        <div className="section-header reveal">
+          <h2 className="section-title">Our <span className="title-highlight">Courses</span></h2>
+          <p>Transform your thinking with our specialized programs.</p>
+        </div>
+        <div className="courses-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+          
+          <div className="course-card reveal reveal-delay-1" style={{ background: '#fff', borderRadius: '12px', padding: '24px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', border: '1px solid #e2e8f0' }}>
+            <div style={{ background: '#f1f5f9', height: '160px', borderRadius: '8px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '48px', color: '#64748b' }}>school</span>
+            </div>
+            <h3 style={{ fontSize: '24px', margin: '0 0 12px 0' }}>30-Days Certification</h3>
+            <p style={{ color: '#64748b', marginBottom: '24px', minHeight: '48px' }}>Build foundational critical thinking skills and learn how to make better decisions in an AI-driven world.</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--primary)' }}>₹2500</span>
+              <a href="/login" className="btn-primary" style={{ padding: '8px 16px', fontSize: '14px', textDecoration: 'none' }}>Enroll Now</a>
+            </div>
+          </div>
+          
+          <div className="course-card-placeholder" style={{ opacity: 0.5, border: '2px dashed #cbd5e1', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', minHeight: '350px' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: '32px', color: '#94a3b8', marginBottom: '8px' }}>add_circle</span>
+            <span style={{ color: '#64748b' }}>Coming Soon</span>
+          </div>
+          <div className="course-card-placeholder" style={{ opacity: 0.5, border: '2px dashed #cbd5e1', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', minHeight: '350px' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: '32px', color: '#94a3b8', marginBottom: '8px' }}>add_circle</span>
+            <span style={{ color: '#64748b' }}>Coming Soon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section className="hiring-network-section section-padding" style={{ background: '#111827', color: 'white' }} id="hiring">
+      <div className="container">
+        <div className="hiring-layout" style={{ display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap-reverse' }}>
+          <div className="hiring-content reveal" style={{ flex: '1', minWidth: '300px' }}>
+            <h2 className="section-title" style={{ color: 'white' }}>ACHL <span className="title-highlight" style={{ color: '#818cf8' }}>Hiring Network</span></h2>
+            <p style={{ fontSize: '18px', color: '#94a3b8', marginBottom: '24px', lineHeight: '1.6' }}>
+              We partner with forward-thinking companies to provide them with talent that knows how to think, not just follow instructions. Hire pre-vetted critical thinkers from our student network.
+            </p>
+            <a href="/signup?role=HR" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'white', color: '#0f172a', textDecoration: 'none' }}>
+              Raise Hiring Requirement
+              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_forward</span>
+            </a>
+          </div>
+          <div className="hiring-visual reveal reveal-delay-1" style={{ flex: '1', minWidth: '300px', background: 'rgba(255,255,255,0.05)', padding: '40px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: '80px', color: '#818cf8', marginBottom: '16px' }}>handshake</span>
+            <h3 style={{ fontSize: '24px', marginBottom: '12px', color: 'white' }}>Access Top Talent</h3>
+            <p style={{ color: '#94a3b8', lineHeight: '1.5' }}>Connect directly with our top performing graduates who have mastered strategic and critical thinking frameworks.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     
     <section className="cta-section" id="enroll">
       <div className="cta-bg-element"></div>
@@ -528,9 +531,6 @@ export default function Home() {
         </div>
       </div>
     </section>
-
-<Collaboration />
-
 </main>
       <WhatsAppButton />
       <Footer />

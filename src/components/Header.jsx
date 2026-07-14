@@ -9,11 +9,11 @@ export default function Header() {
     <>
       <header className="main-header" id="main-header">
         <div className="header-inner">
-          <Link href="/" className="logo">ACHL Learning</Link>
+          <Link href="/" className="logo">ACHL</Link>
           <nav className="desktop-nav">
             <Link href="/about">About</Link>
             <Link href="/certification">Certification Program</Link>
-            <Link href="/hr">For HR</Link>
+            <Link href="/for-hr">For HR</Link>
             <Link href="/contact">Contact</Link>
           </nav>
           <div className="header-cta-wrapper">
@@ -37,7 +37,7 @@ export default function Header() {
       <div className={`mobile-menu ${menuOpen ? 'active' : ''}`} id="mobile-menu" style={{ display: menuOpen ? 'flex' : 'none' }}>
         <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
         <Link href="/certification" onClick={() => setMenuOpen(false)}>Certification Program</Link>
-        <Link href="/hr" onClick={() => setMenuOpen(false)}>For HR</Link>
+        <Link href="/for-hr" onClick={() => setMenuOpen(false)}>For HR</Link>
         <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
         <Link href="/login" onClick={() => setMenuOpen(false)}>Login</Link>
         <Link href="/signup" className="mobile-cta" onClick={() => setMenuOpen(false)}>Sign Up</Link>

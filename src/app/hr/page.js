@@ -1,136 +1,174 @@
-import React from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Link from 'next/link';
+'use client';
+import { useEffect, useState } from 'react';
 
-export default function HRPage() {
+export default function HRDashboard() {
+  const [user, setUser] = useState(null);
+  const [requirements, setRequirements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [newReq, setNewReq] = useState({ title: '', description: '' });
+  const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      if (parsed.role !== 'HR' && parsed.role !== 'COMPANY') {
+        window.location.href = '/dashboard';
+        return;
+      }
+      setUser(parsed);
+      fetchRequirements(parsed.id);
+    } else {
+      window.location.href = '/login';
+    }
+  }, []);
+
+  const fetchRequirements = async (hrId) => {
+    try {
+      const res = await fetch(`/api/hr/requirements?hrId=${hrId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setRequirements(data);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+  };
+
+  const handleCreateReq = async (e) => {
+    e.preventDefault();
+    setIsCreating(true);
+    try {
+      const res = await fetch('/api/hr/requirements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...newReq, hrId: user.id })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setRequirements([...requirements, data]);
+        setNewReq({ title: '', description: '' });
+      } else {
+        alert('Failed to create requirement');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Error creating requirement');
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  if (!user || loading) return <div style={{ padding: '40px' }}>Loading HR Dashboard...</div>;
+
   return (
-    <>
-      <Header />
-      <main style={{ backgroundColor: 'var(--background)' }}>
-        
-        {/* HERO */}
-        <section style={{ padding: '60px 20px 80px 20px', backgroundColor: 'var(--surface-container)', color: 'var(--on-surface)' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
-            <div style={{ flex: '1 1 600px' }}>
-              <span style={{ display: 'inline-block', padding: '6px 12px', backgroundColor: 'var(--surface-container-lowest)', color: 'var(--primary)', borderRadius: '20px', fontSize: '14px', fontWeight: 700, marginBottom: '24px', letterSpacing: '1px' }}>
-                ACHL HIRING NETWORK
-              </span>
-              <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 800, lineHeight: 1.1, marginBottom: '24px' }}>
-                Hire Pre-Screened Talent, Not Just Resumes.
-              </h1>
-              <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '40px', lineHeight: 1.6, maxWidth: '600px' }}>
-                ACHL helps companies hire students who have been trained in Critical Thinking, Problem Solving and Decision Making. Instead of visiting multiple campuses, simply share your hiring requirements and we'll shortlist candidates who match your role, budget and expectations.
-              </p>
-              
-              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '40px' }}>
-                <a href="#hire-form" className="btn-primary" style={{ padding: '16px 32px', fontSize: '1.1rem' }}>Raise Hiring Requirement</a>
-                <a href="#benefits" className="btn-secondary" style={{ padding: '16px 32px', fontSize: '1.1rem', backgroundColor: 'var(--surface-container-lowest)', color: 'var(--on-surface)', border: '2px solid var(--border-light)' }}>Why ACHL?</a>
-              </div>
+    <div style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: 'sans-serif' }}>
+      <header style={{ background: '#fff', padding: '16px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0' }}>
+        <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--primary)' }}>ACHL HR Portal</div>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <span style={{ fontWeight: '500', color: '#334155' }}>{user.name}</span>
+          <button onClick={handleLogout} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500', color: '#475569' }}>Logout</button>
+        </div>
+      </header>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '20px' }}>
-                <div>
-                  <h3 style={{ fontSize: '2rem', margin: 0, color: 'var(--primary)' }}>₹499</h3>
-                  <span style={{ color: 'var(--text-muted)' }}>Per Successful Hire*</span>
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '2rem', margin: 0, color: 'var(--primary)' }}>0</h3>
-                  <span style={{ color: 'var(--text-muted)' }}>Platform Fee</span>
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '2rem', margin: 0, color: 'var(--primary)' }}>Pre</h3>
-                  <span style={{ color: 'var(--text-muted)' }}>Screened Candidates</span>
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '2rem', margin: 0, color: 'var(--primary)' }}>One</h3>
-                  <span style={{ color: 'var(--text-muted)' }}>Hiring Partner</span>
-                </div>
-              </div>
-            </div>
+      <main style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
+        <div style={{ marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '32px', marginBottom: '8px', color: '#0f172a' }}>Welcome, {user.name}!</h1>
+          <p style={{ color: '#64748b' }}>Manage your hiring requirements and view candidate profiles.</p>
+        </div>
 
-            {/* What You Get Card */}
-            <div style={{ flex: '1 1 300px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '16px', padding: '32px', border: '1px solid var(--border-light)' }}>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid var(--border-light)', paddingBottom: '16px' }}>What You Get</h3>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {['Trained Professionals', 'Pre-Screened Candidates', 'Shortlisting Based On Role', 'Shortlisting Based On Budget', 'Access To Multiple Campuses', 'No Platform Charges', 'Pay Only After Hiring', 'Dedicated Hiring Support'].map((item, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.1rem' }}>
-                    <span className="material-symbols-outlined" style={{ color: 'var(--primary)' }}>check_circle</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* WHY HIRE THROUGH ACHL */}
-        <section id="benefits" style={{ padding: '80px 20px 40px 20px', backgroundColor: 'var(--surface)' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-            <span style={{ display: 'inline-block', padding: '6px 12px', backgroundColor: 'var(--surface-container-highest)', color: 'var(--primary)', borderRadius: '20px', fontSize: '14px', fontWeight: 700, marginBottom: '16px' }}>WHY HIRE THROUGH ACHL?</span>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.5rem)', marginBottom: '24px' }}>Save Time. Reduce Hiring Costs. Access Better Talent.</h2>
-            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '800px', margin: '0 auto 60px auto', lineHeight: 1.6 }}>
-              We simplify campus hiring by connecting employers with trained and evaluated candidates from our partner institutions.
-            </p>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
-              <div style={{ padding: '40px 32px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '16px', border: '1px solid var(--border-light)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '5rem', fontWeight: 900, color: 'var(--surface-container-highest)', position: 'absolute', top: '10px', right: '10px', opacity: 0.5, zIndex: 0, lineHeight: 1 }}>01</div>
-                <div style={{ position: 'relative', zIndex: 1, textAlign: 'left' }}>
-                  <h3 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>Trained Candidates</h3>
-                  <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Every candidate is trained in critical thinking, structured problem solving and professional communication.</p>
-                </div>
-              </div>
-              <div style={{ padding: '40px 32px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '16px', border: '1px solid var(--border-light)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '5rem', fontWeight: 900, color: 'var(--surface-container-highest)', position: 'absolute', top: '10px', right: '10px', opacity: 0.5, zIndex: 0, lineHeight: 1 }}>02</div>
-                <div style={{ position: 'relative', zIndex: 1, textAlign: 'left' }}>
-                  <h3 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>Pre-Screened Profiles</h3>
-                  <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Candidates are shortlisted according to your job role, required skills and salary budget.</p>
-                </div>
-              </div>
-              <div style={{ padding: '40px 32px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '16px', border: '1px solid var(--border-light)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ fontSize: '5rem', fontWeight: 900, color: 'var(--surface-container-highest)', position: 'absolute', top: '10px', right: '10px', opacity: 0.5, zIndex: 0, lineHeight: 1 }}>03</div>
-                <div style={{ position: 'relative', zIndex: 1, textAlign: 'left' }}>
-                  <h3 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>One Network. Multiple Colleges.</h3>
-                  <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Instead of coordinating with multiple campuses, access talent from our partner institutions through a single hiring platform.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* WHO CAN HIRE */}
-        <section style={{ padding: '40px 20px 100px 20px', maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <span style={{ display: 'inline-block', padding: '6px 12px', backgroundColor: 'var(--surface-container-highest)', color: 'var(--primary)', borderRadius: '20px', fontSize: '14px', fontWeight: 700, marginBottom: '16px' }}>WHO CAN HIRE?</span>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>We Support Hiring Across Different Organizations</h2>
-          </div>
+        <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '32px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '40px', color: 'var(--primary)', marginBottom: '16px' }}>corporate_fare</span>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '12px' }}>Startups</h3>
-              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Build your team with capable young professionals.</p>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '32px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '40px', color: 'var(--primary)', marginBottom: '16px' }}>storefront</span>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '12px' }}>MSMEs</h3>
-              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Hire cost-effective talent ready to contribute.</p>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '32px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '40px', color: 'var(--primary)', marginBottom: '16px' }}>business</span>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '12px' }}>Corporates</h3>
-              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Recruit pre-screened candidates for entry-level roles.</p>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '32px', backgroundColor: 'var(--surface-container-lowest)', borderRadius: '12px', border: '1px solid var(--border-light)' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '40px', color: 'var(--primary)', marginBottom: '16px' }}>rocket_launch</span>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '12px' }}>Founders</h3>
-              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Focus on building your business while ACHL finds the right talent.</p>
-            </div>
+          {/* Create Requirement Form */}
+          <div style={{ flex: '1', minWidth: '300px', background: '#fff', padding: '24px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+            <h2 style={{ fontSize: '20px', margin: '0 0 16px 0', color: '#0f172a' }}>Raise Hiring Requirement</h2>
+            <form onSubmit={handleCreateReq}>
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#334155' }}>Job Title</label>
+                <input 
+                  type="text" 
+                  required
+                  placeholder="e.g. Business Analyst"
+                  style={{ width: '100%', padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px' }}
+                  value={newReq.title}
+                  onChange={(e) => setNewReq({...newReq, title: e.target.value})}
+                />
+              </div>
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#334155' }}>Job Description / Requirements</label>
+                <textarea 
+                  required
+                  rows="4"
+                  placeholder="Describe the role, responsibilities, and required skills..."
+                  style={{ width: '100%', padding: '10px', border: '1px solid #cbd5e1', borderRadius: '6px' }}
+                  value={newReq.description}
+                  onChange={(e) => setNewReq({...newReq, description: e.target.value})}
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={isCreating}
+                style={{ width: '100%', background: '#2563eb', color: '#fff', padding: '12px', borderRadius: '6px', fontWeight: '500', border: 'none', cursor: 'pointer' }}
+              >
+                {isCreating ? 'Submitting...' : 'Submit Requirement'}
+              </button>
+            </form>
           </div>
-        </section>
 
+          {/* List of Requirements & Referrals */}
+          <div style={{ flex: '2', minWidth: '400px' }}>
+            <h2 style={{ fontSize: '20px', margin: '0 0 16px 0', color: '#0f172a' }}>Your Requirements</h2>
+            
+            {requirements.length === 0 ? (
+              <div style={{ background: '#fff', padding: '32px', borderRadius: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#64748b' }}>
+                You haven't raised any hiring requirements yet.
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {requirements.map((req) => (
+                  <div key={req.id} style={{ background: '#fff', padding: '24px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                      <h3 style={{ margin: 0, fontSize: '18px', color: '#0f172a' }}>{req.title}</h3>
+                      <span style={{ fontSize: '12px', fontWeight: '600', padding: '4px 8px', borderRadius: '4px', background: req.status === 'OPEN' ? '#dcfce7' : '#f1f5f9', color: req.status === 'OPEN' ? '#166534' : '#475569' }}>
+                        {req.status}
+                      </span>
+                    </div>
+                    <p style={{ color: '#475569', fontSize: '14px', marginBottom: '16px', whiteSpace: 'pre-wrap' }}>{req.description}</p>
+                    
+                    <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
+                      <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#334155' }}>Referred Candidates</h4>
+                      
+                      {!req.referrals || req.referrals.length === 0 ? (
+                        <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0 }}>No candidates referred by admin yet.</p>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {req.referrals.map(ref => (
+                            <div key={ref.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '12px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+                              <div>
+                                <div style={{ fontWeight: '500', color: '#0f172a', fontSize: '14px' }}>{ref.student.name}</div>
+                                <div style={{ color: '#64748b', fontSize: '12px' }}>{ref.student.email}</div>
+                              </div>
+                              <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: '500' }}>Referred</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+        </div>
       </main>
-      <Footer />
-    </>
+    </div>
   );
 }

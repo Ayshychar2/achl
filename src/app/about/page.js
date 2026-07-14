@@ -29,6 +29,29 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* FOUNDER MESSAGE */}
+        <section style={{ backgroundColor: 'var(--surface-container)', padding: '100px 20px' }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
+            <div style={{ flex: '1 1 300px', height: '400px', backgroundColor: 'var(--surface-container-highest)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', overflow: 'hidden' }}>
+              <img src="/founder.jpeg" alt="Founder" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ flex: '1 1 500px' }}>
+              <span style={{ display: 'inline-block', padding: '6px 12px', backgroundColor: 'var(--surface-container-lowest)', color: 'var(--primary)', borderRadius: '20px', fontSize: '14px', fontWeight: 700, marginBottom: '16px' }}>FOUNDER'S MESSAGE</span>
+              <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', lineHeight: 1.3 }}>The Future Belongs To Thinkers.</h2>
+              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
+                When I looked around, I realised students were graduating with degrees but struggling to solve practical business problems. At the same time, Artificial Intelligence was changing the nature of work faster than education could adapt.
+              </p>
+              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '24px' }}>
+                ACHL was created with a simple mission — to help people become irreplaceable by developing the one capability machines cannot replicate: independent thinking.
+              </p>
+              <blockquote style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '20px', fontStyle: 'italic', fontSize: '1.2rem', color: 'var(--on-surface-variant)', marginBottom: '24px', backgroundColor: 'var(--surface-container-lowest)', padding: '16px', borderRadius: '4px' }}>
+                "Knowledge may open doors, but the ability to think determines how far you go."
+              </blockquote>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 600 }}>— Founder, ACHL</h4>
+            </div>
+          </div>
+        </section>
+
         {/* WHO WE ARE */}
         <section style={{ backgroundColor: 'var(--surface)', padding: '40px 20px' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -162,28 +185,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* FOUNDER MESSAGE */}
-        <section style={{ backgroundColor: 'var(--surface-container)', padding: '100px 20px' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
-            <div style={{ flex: '1 1 300px', height: '400px', backgroundColor: 'var(--surface-container-highest)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
-              <span>Founder Image</span>
-            </div>
-            <div style={{ flex: '1 1 500px' }}>
-              <span style={{ display: 'inline-block', padding: '6px 12px', backgroundColor: 'var(--surface-container-lowest)', color: 'var(--primary)', borderRadius: '20px', fontSize: '14px', fontWeight: 700, marginBottom: '16px' }}>FOUNDER'S MESSAGE</span>
-              <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', lineHeight: 1.3 }}>The Future Belongs To Thinkers.</h2>
-              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
-                When I looked around, I realised students were graduating with degrees but struggling to solve practical business problems. At the same time, Artificial Intelligence was changing the nature of work faster than education could adapt.
-              </p>
-              <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '24px' }}>
-                ACHL was created with a simple mission — to help people become irreplaceable by developing the one capability machines cannot replicate: independent thinking.
-              </p>
-              <blockquote style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '20px', fontStyle: 'italic', fontSize: '1.2rem', color: 'var(--on-surface-variant)', marginBottom: '24px', backgroundColor: 'var(--surface-container-lowest)', padding: '16px', borderRadius: '4px' }}>
-                "Knowledge may open doors, but the ability to think determines how far you go."
-              </blockquote>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 600 }}>— Founder, ACHL</h4>
-            </div>
-          </div>
-        </section>
+
 
         {/* OUR IMPACT (Redesigned with Grid) */}
         <section style={{ backgroundColor: 'var(--surface)', padding: '100px 20px' }}>
