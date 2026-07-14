@@ -53,12 +53,7 @@ export default function Home() {
     </section>
 
     {/* COLLABORATION SECTION */}
-    <section className="collab-section section-padding" style={{ background: '#f8fafc', paddingTop: '40px', paddingBottom: '40px', overflow: 'hidden' }}>
-      <div className="container">
-        <div className="section-header reveal" style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 className="section-title">In <span className="title-highlight">Collaboration</span> With</h2>
-        </div>
-      </div>
+    <section className="collab-section" style={{ background: '#f8fafc', paddingTop: '40px', paddingBottom: '20px', overflow: 'hidden' }}>
       <div style={{ display: 'flex', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%' }}>
         <div style={{ display: 'flex', gap: '40px', paddingLeft: '40px', animation: 'marquee 15s linear infinite' }}>
           {[...Array(8)].map((_, i) => (
@@ -76,7 +71,7 @@ export default function Home() {
     </section>
     
     {/* RICH TEXT SECTION */}
-    <section className="intro-section section-padding" id="about" style={{ backgroundColor: 'var(--background)' }}>
+    <section className="intro-section section-padding" id="about" style={{ backgroundColor: 'var(--background)', paddingTop: '40px' }}>
       <div className="container intro-inner">
         <h2 className="intro-title reveal reveal-delay-1" style={{ marginBottom: '32px' }}>
           Building Critical <span style={{ color: '#98000B' }}>Thinkers</span> In the Era of AI
