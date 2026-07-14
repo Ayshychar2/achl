@@ -6,7 +6,6 @@ import ScrollReveal from '@/components/ScrollReveal';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import BookDemoForm from '@/components/BookDemoForm';
-import HeroSlider from '@/components/HeroSlider';
 
 export default function Home() {
   return (
@@ -16,41 +15,100 @@ export default function Home() {
       <main>
         
 
-    <HeroSlider />
+    {/* NEW SPLIT HERO SECTION */}
+    <section className="hero-section section-padding" id="hero" style={{ paddingTop: '80px', paddingBottom: '60px', backgroundColor: 'var(--surface)' }}>
+      <div className="container">
+        <div className="hero-layout" style={{ display: 'flex', gap: '60px', alignItems: 'center', flexWrap: 'wrap' }}>
+          
+          <div className="hero-content reveal" style={{ flex: '1', minWidth: '300px' }}>
+            <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '24px' }}>
+              The All-in-One<br />
+              Learning Platform<br />
+              for <span className="title-highlight">Modern Thinkers</span>
+            </h1>
+            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '32px', lineHeight: 1.6 }}>
+              ACHL helps you plan, track, collaborate, and grow your critical thinking ability — all in one powerful platform.
+            </p>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <a href="#enroll" className="btn-primary hover-translate-y" style={{ padding: '14px 28px', fontSize: '1.1rem', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s', cursor: 'pointer' }}>
+                Book a Demo <span className="material-symbols-outlined">arrow_forward</span>
+              </a>
+              <a href="#programs" className="hover-translate-y" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', fontWeight: 600, padding: '14px 28px', transition: 'all 0.3s', cursor: 'pointer' }}>
+                Explore Programs
+              </a>
+            </div>
+          </div>
 
+          <div className="hero-visual reveal reveal-delay-1" style={{ flex: '1', minWidth: '300px', position: 'relative', display: 'flex', justifyContent: 'center' }}>
+            <div className="animated-card-box" style={{ maxWidth: '450px', width: '100%' }}>
+              <span></span>
+              <div className="animated-card-content">
+                <img src="/hero-slide-2.jpeg" alt="Platform Dashboard Mockup" style={{ width: '100%', borderRadius: '16px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', display: 'block' }} />
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    {/* COLLABORATION SECTION */}
+    <section className="collab-section section-padding" style={{ background: '#f8fafc', paddingTop: '40px', paddingBottom: '40px', overflow: 'hidden' }}>
+      <div className="container">
+        <div className="section-header reveal" style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h2 className="section-title">In <span className="title-highlight">Collaboration</span> With</h2>
+        </div>
+      </div>
+      <div style={{ display: 'flex', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%' }}>
+        <div style={{ display: 'flex', gap: '40px', paddingLeft: '40px', animation: 'marquee 15s linear infinite' }}>
+          {[...Array(8)].map((_, i) => (
+            <div key={i} style={{ width: '160px', height: '80px', background: '#e2e8f0', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '14px', flexShrink: 0 }}>
+              Logo Placeholder
+            </div>
+          ))}
+          {[...Array(8)].map((_, i) => (
+            <div key={`copy-${i}`} style={{ width: '160px', height: '80px', background: '#e2e8f0', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '14px', flexShrink: 0 }}>
+              Logo Placeholder
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
     
-    <section className="intro-section section-padding" id="about">
+    {/* RICH TEXT SECTION */}
+    <section className="intro-section section-padding" id="about" style={{ backgroundColor: 'var(--background)' }}>
       <div className="container intro-inner">
-        <span className="intro-label reveal">The ACHL Mission</span>
-        <h2 className="intro-title reveal reveal-delay-1">
-          Building Critical <span className="title-highlight">Thinkers</span> In the Era of AI.
+        <h2 className="intro-title reveal reveal-delay-1" style={{ marginBottom: '32px' }}>
+          Building Critical <span style={{ color: '#98000B' }}>Thinkers</span> In the Era of AI
         </h2>
         <div className="intro-body reveal reveal-delay-2">
-          <p>
-            Every year, over one crore students graduate in India, but according to the India Skills Report 2024, only 45.9% are considered employable. That means more than half of our degree holders are not job-ready.
-          </p>
-          <p className="intro-callout">
-            The problem is not knowledge.<br />
-            The problem is application.
-          </p>
-          <p className="intro-muted">
-            Students can solve questions. But struggle when profit doesn't mean success, good companies get rejected, or markets change suddenly. Real-world decisions require critical thinking.
+          <p style={{ fontSize: '1.2rem', lineHeight: '1.8', textAlign: 'center' }}>
+            Every year, over 1 crore students graduate in India, yet only 45.9% are considered employable (India Skills Report 2024). The problem isn't a lack of knowledge, it's a lack of practical application. While many students can solve textbook questions, they often struggle with real-world decision-making, where critical thinking, adaptability, and problem-solving matter most.
           </p>
         </div>
       </div>
     </section>
 
-    <section className="founder-section section-padding" style={{ background: '#fff' }}>
+    {/* FOUNDER SECTION */}
+    <section className="founder-section section-padding" style={{ backgroundColor: '#F9F9F9' }}>
       <div className="container">
-        <div className="founder-layout" style={{ display: 'flex', gap: '60px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <div className="founder-image reveal" style={{ flex: '0.7', minWidth: '300px', maxWidth: '400px', margin: '0 auto' }}>
-            <img src="/founder.jpeg" alt="ACHL Founder" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }} />
+        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
+          <div className="reveal hover-scale founder-image-container" style={{ flex: '1 1 300px', backgroundColor: 'var(--surface-container-highest)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', overflow: 'hidden', transition: 'transform 0.3s ease-out', cursor: 'pointer' }}>
+            <img src="/founder.jpeg" alt="Founder" className="hover-scale-lg" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease-out' }} />
           </div>
-          <div className="founder-content reveal reveal-delay-1" style={{ flex: '1', minWidth: '300px' }}>
-            <h2 className="section-title">Meet Our <span className="title-highlight">Founder</span></h2>
-            <p style={{ fontSize: '18px', lineHeight: '1.6', color: 'var(--text-muted)' }}>
-              "The ability to think critically is the ultimate competitive advantage in an AI-driven world. We built ACHL to bridge the gap between academic knowledge and real-world decision-making."
+          <div className="reveal reveal-delay-1" style={{ flex: '1 1 500px' }}>
+            <span style={{ display: 'inline-block', padding: '6px 12px', backgroundColor: 'var(--surface-container-lowest)', color: 'var(--primary)', borderRadius: '20px', fontSize: '14px', fontWeight: 700, marginBottom: '16px' }}>FOUNDER'S MESSAGE</span>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', lineHeight: 1.3 }}>The Future Belongs To Thinkers.</h2>
+            <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
+              When I looked around, I realised students were graduating with degrees but struggling to solve practical business problems. At the same time, Artificial Intelligence was changing the nature of work faster than education could adapt.
             </p>
+            <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '24px' }}>
+              ACHL was created with a simple mission — to help people become irreplaceable by developing the one capability machines cannot replicate: independent thinking.
+            </p>
+            <blockquote className="hover-translate-x" style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '20px', fontStyle: 'italic', fontSize: '1.2rem', color: 'var(--on-surface-variant)', marginBottom: '24px', backgroundColor: 'var(--surface-container-lowest)', padding: '16px', borderRadius: '4px', transition: 'transform 0.2s' }}>
+              "Knowledge may open doors, but the ability to think determines how far you go."
+            </blockquote>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 600 }}>— Founder, ACHL</h4>
           </div>
         </div>
       </div>
@@ -473,29 +531,6 @@ export default function Home() {
             <span className="material-symbols-outlined" style={{ fontSize: '32px', color: '#94a3b8', marginBottom: '8px' }}>add_circle</span>
             <span style={{ color: '#64748b' }}>Coming Soon</span>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section className="collab-section section-padding" style={{ background: '#f8fafc', paddingTop: '40px', overflow: 'hidden' }}>
-      <div className="container">
-        <div className="section-header reveal">
-          <h2 className="section-title">In <span className="title-highlight">Collaboration</span> With</h2>
-        </div>
-      </div>
-      <div style={{ display: 'flex', overflow: 'hidden', whiteSpace: 'nowrap', marginTop: '20px', width: '100%' }}>
-        <div style={{ display: 'flex', gap: '40px', paddingLeft: '40px', animation: 'marquee 15s linear infinite' }}>
-          {/* We duplicate the placeholders to create a seamless infinite loop */}
-          {[...Array(8)].map((_, i) => (
-            <div key={i} style={{ width: '160px', height: '80px', background: '#e2e8f0', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '14px', flexShrink: 0 }}>
-              Logo Placeholder
-            </div>
-          ))}
-          {[...Array(8)].map((_, i) => (
-            <div key={`copy-${i}`} style={{ width: '160px', height: '80px', background: '#e2e8f0', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '14px', flexShrink: 0 }}>
-              Logo Placeholder
-            </div>
-          ))}
         </div>
       </div>
     </section>
