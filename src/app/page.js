@@ -477,23 +477,46 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="hiring-network-section section-padding" style={{ background: '#111827', color: 'white' }} id="hiring">
+    <section className="collab-section section-padding" style={{ background: '#f8fafc', overflow: 'hidden' }}>
+      <div className="container">
+        <div className="section-header reveal">
+          <h2 className="section-title">In <span className="title-highlight">Collaboration</span> With</h2>
+        </div>
+      </div>
+      <div style={{ display: 'flex', overflow: 'hidden', whiteSpace: 'nowrap', marginTop: '20px', width: '100%' }}>
+        <div style={{ display: 'flex', gap: '40px', paddingLeft: '40px', animation: 'marquee 15s linear infinite' }}>
+          {/* We duplicate the placeholders to create a seamless infinite loop */}
+          {[...Array(8)].map((_, i) => (
+            <div key={i} style={{ width: '160px', height: '80px', background: '#e2e8f0', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '14px', flexShrink: 0 }}>
+              Logo Placeholder
+            </div>
+          ))}
+          {[...Array(8)].map((_, i) => (
+            <div key={`copy-${i}`} style={{ width: '160px', height: '80px', background: '#e2e8f0', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: '14px', flexShrink: 0 }}>
+              Logo Placeholder
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section className="hiring-network-section section-padding" style={{ background: '#fff' }} id="hiring">
       <div className="container">
         <div className="hiring-layout" style={{ display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap-reverse' }}>
           <div className="hiring-content reveal" style={{ flex: '1', minWidth: '300px' }}>
-            <h2 className="section-title" style={{ color: 'white' }}>ACHL <span className="title-highlight" style={{ color: '#818cf8' }}>Hiring Network</span></h2>
-            <p style={{ fontSize: '18px', color: '#94a3b8', marginBottom: '24px', lineHeight: '1.6' }}>
+            <h2 className="section-title">ACHL <span className="title-highlight">Hiring Network</span></h2>
+            <p style={{ fontSize: '18px', color: 'var(--text-muted)', marginBottom: '24px', lineHeight: '1.6' }}>
               We partner with forward-thinking companies to provide them with talent that knows how to think, not just follow instructions. Hire pre-vetted critical thinkers from our student network.
             </p>
-            <a href="/signup?role=HR" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'white', color: '#0f172a', textDecoration: 'none' }}>
+            <a href="/signup?role=HR" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
               Raise Hiring Requirement
               <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_forward</span>
             </a>
           </div>
-          <div className="hiring-visual reveal reveal-delay-1" style={{ flex: '1', minWidth: '300px', background: 'rgba(255,255,255,0.05)', padding: '40px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center' }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '80px', color: '#818cf8', marginBottom: '16px' }}>handshake</span>
-            <h3 style={{ fontSize: '24px', marginBottom: '12px', color: 'white' }}>Access Top Talent</h3>
-            <p style={{ color: '#94a3b8', lineHeight: '1.5' }}>Connect directly with our top performing graduates who have mastered strategic and critical thinking frameworks.</p>
+          <div className="hiring-visual reveal reveal-delay-1" style={{ flex: '1', minWidth: '300px', background: '#f8fafc', padding: '40px', borderRadius: '16px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: '80px', color: 'var(--primary)', marginBottom: '16px' }}>handshake</span>
+            <h3 style={{ fontSize: '24px', marginBottom: '12px', color: '#0f172a' }}>Access Top Talent</h3>
+            <p style={{ color: 'var(--text-muted)', lineHeight: '1.5' }}>Connect directly with our top performing graduates who have mastered strategic and critical thinking frameworks.</p>
           </div>
         </div>
       </div>
