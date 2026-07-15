@@ -110,7 +110,7 @@ function SignupForm() {
 
 export default function Signup() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f4f4f5' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'url(/overlay-bg.png) center/cover no-repeat, #f4f4f5' }}>
       <Suspense fallback={<div>Loading...</div>}>
         <SignupForm />
       </Suspense>

@@ -85,7 +85,7 @@ export default function Home() {
     </section>
 
     {/* FOUNDER SECTION */}
-    <section className="founder-section section-padding" style={{ backgroundColor: '#F9F9F9' }}>
+    <section className="founder-section section-padding" style={{ backgroundColor: '#E8E8E8' }}>
       <div className="container">
         <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
           <div className="reveal hover-scale founder-image-container" style={{ flex: '1 1 300px', backgroundColor: 'var(--surface-container-highest)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', overflow: 'hidden', transition: 'transform 0.3s ease-out', cursor: 'pointer' }}>

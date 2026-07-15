@@ -1,13 +1,22 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <>
-      <header className="main-header" id="main-header">
+      <header className={`main-header ${scrolled ? 'scrolled' : ''}`} id="main-header">
         <div className="header-inner">
           <Link href="/" className="logo">ACHL</Link>
           <nav className="desktop-nav">
@@ -17,7 +26,7 @@ export default function Header() {
             <Link href="/contact">Contact</Link>
           </nav>
           <div className="header-cta-wrapper">
-            <Link href="/login" className="btn-text" style={{ marginRight: '12px', fontWeight: 600, textDecoration: 'none', color: 'var(--on-background)' }}>
+            <Link href="/login" className="btn-text" style={{ marginRight: '12px', fontWeight: 600, textDecoration: 'none' }}>
               Login
             </Link>
             <Link href="/signup" className="btn-primary">Sign Up</Link>
