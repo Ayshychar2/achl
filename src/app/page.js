@@ -350,8 +350,8 @@ export default function Home() {
               "ACHL connects student learning with real industry expectations. Our students become job-ready, and hiring becomes faster and more effective."
             </blockquote>
             <div className="testimonial-author">
-              <div className="testimonial-avatar">
-                <span className="material-symbols-outlined">person</span>
+              <div className="testimonial-avatar" style={{ overflow: 'hidden' }}>
+                <img src="/1.jpg" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <p className="testimonial-name">Placement Director</p>
@@ -366,8 +366,8 @@ export default function Home() {
               "We don't just prepare students for jobs. We prepare them to build. The decision-making frameworks provided are invaluable for future founders."
             </blockquote>
             <div className="testimonial-author">
-              <div className="testimonial-avatar">
-                <span className="material-symbols-outlined">person</span>
+              <div className="testimonial-avatar" style={{ overflow: 'hidden' }}>
+                <img src="/2.jpg" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <p className="testimonial-name">Startup Incubator Lead</p>
@@ -382,8 +382,8 @@ export default function Home() {
               "The gap is not knowledge. The gap is thinking. ACHL creates the difference by focusing on building the ability to think through real situations."
             </blockquote>
             <div className="testimonial-author">
-              <div className="testimonial-avatar">
-                <span className="material-symbols-outlined">person</span>
+              <div className="testimonial-avatar" style={{ overflow: 'hidden' }}>
+                <img src="/11.jpg" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <p className="testimonial-name">Corporate Strategy Head</p>
@@ -398,8 +398,8 @@ export default function Home() {
               "Critical thinking isn't optional anymore. ACHL gave our students the framework to approach problems like strategists, not just graduates."
             </blockquote>
             <div className="testimonial-author">
-              <div className="testimonial-avatar">
-                <span className="material-symbols-outlined">person</span>
+              <div className="testimonial-avatar" style={{ overflow: 'hidden' }}>
+                <img src="/22.jpg" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <p className="testimonial-name">Dean of Academics</p>
@@ -414,8 +414,8 @@ export default function Home() {
               "After the ACHL program, our placement rate improved by 30%. Students now articulate their thought process, not just their answers."
             </blockquote>
             <div className="testimonial-author">
-              <div className="testimonial-avatar">
-                <span className="material-symbols-outlined">person</span>
+              <div className="testimonial-avatar" style={{ overflow: 'hidden' }}>
+                <img src="/111.jpg" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <p className="testimonial-name">Training & Placement Officer</p>
@@ -430,8 +430,8 @@ export default function Home() {
               "In a world full of AI tools, hiring managers still need people who can think. ACHL addresses exactly that skill gap."
             </blockquote>
             <div className="testimonial-author">
-              <div className="testimonial-avatar">
-                <span className="material-symbols-outlined">person</span>
+              <div className="testimonial-avatar" style={{ overflow: 'hidden' }}>
+                <img src="/2.jpg" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <p className="testimonial-name">HR Director</p>
