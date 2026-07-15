@@ -1205,7 +1205,7 @@ input { font-family: inherit; }
   overflow: hidden;
 }
 
-.social-link:hover {
+.footer-column .social-link:hover {
   background-color: var(--primary);
   color: var(--on-primary);
 }
@@ -1993,7 +1993,7 @@ body.auth-page {
 
 /* Specific background colors for the animation */
 .btn-primary::before, .btn-hero-primary::before, .btn-auth::before {
-  background: var(--primary-container);
+  background: #fff;
 }
 
 .btn-secondary::before, .btn-hero-secondary::before, .btn-dash::before {
@@ -2010,9 +2010,19 @@ body.auth-page {
   top: 0;
 }
 
+/* Change text color on hover for buttons where background becomes white */
+.btn-primary:hover, .btn-hero-primary:hover, .btn-auth:hover,
+.btn-primary:hover *, .btn-hero-primary:hover *, .btn-auth:hover * {
+  color: var(--primary) !important;
+}
+
 /* Animate icons and text inside cards/buttons on hover */
-.btn-primary:hover .material-symbols-outlined, .btn-secondary:hover .material-symbols-outlined, 
-.btn-hero-primary:hover .material-symbols-outlined, .btn-hero-secondary:hover .material-symbols-outlined,
+.btn-primary:hover .material-symbols-outlined, .btn-hero-primary:hover .material-symbols-outlined {
+  color: var(--primary) !important;
+  transform: rotateY(360deg);
+}
+
+.btn-secondary:hover .material-symbols-outlined, .btn-hero-secondary:hover .material-symbols-outlined,
 .course-card:hover .material-symbols-outlined, .feature-card:hover .material-symbols-outlined, 
 .glass-card:hover .material-symbols-outlined, .framework-card:hover .material-symbols-outlined, 
 .offering-item:hover .material-symbols-outlined, .glass-card:hover .card-icon {
